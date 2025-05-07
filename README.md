@@ -4,7 +4,8 @@
 
 ## 1 项目结构
 
-- `train-wry.py`: 模型训练脚本
+- `train_emoji.py`: 表情包风格模型训练脚本
+- `train_poster.py`: 海报风格模型训练脚本
 - `inference_e.py`: 模型推理脚本
 - `pytorch_lora_weights.safetensors`: 训练后的LoRA权重文件
 
@@ -14,11 +15,17 @@
 
    `pip install -r requirements.txt`
 
-2. 将整理好的数据集图片文件和训练程序`train-wry.py`放在一起，然后可以直接运行这个文件
+2. 根据需要训练的图片风格，选择对应的训练脚本：
+   - 表情包风格：将表情包数据集与`train_emoji.py`放在一起，运行：
+     ```bash
+     python train_emoji.py
+     ```
+   - 海报风格：将海报数据集与`train_poster.py`放在一起，运行：
+     ```bash
+     python train_poster.py
+     ```
 
-   `python train-wry.py`
-
-3. 最后训练完成后输出lora数据`pytorch_lora_weights.safetensors`，将其与`inference_e.py`放在一起，调整其中的prompt（第49行）后运行
+3. 训练完成后会输出对应的lora权重文件`pytorch_lora_weights.safetensors`，将其与`inference_e.py`放在一起，调整其中的prompt后运行：
 
    `python inference_e.py`
 
@@ -109,7 +116,7 @@ W = W₀ + BA
 - 训练速度快，显存占用小
 - 可以保存为独立的权重文件，方便切换不同的风格
 
-## 3 训练过程（train-wry.py）
+## 3 训练过程
 
 ### 3.1 数据集准备
 
@@ -118,6 +125,10 @@ W = W₀ + BA
 - 支持多种图像格式（PNG、JPG、JPEG等）
 - 图像和文本标注需要一一对应
 - 自动进行图像预处理和文本标记化
+
+根据需要训练的风格，准备相应的数据集：
+- 表情包风格：收集具有表情包特征的图片
+- 海报风格：收集具有海报设计特征的图片
 
 ### 3.2 训练配置
 
@@ -185,3 +196,4 @@ for i, image in enumerate(images):
 2. 首次运行时会自动下载基础模型，需要稳定的网络连接
 3. 生成的图像质量受提示词质量的影响，建议使用详细的描述
 4. 默认添加了"卡通风格，暖色调，科技感"的风格提示词，可以根据需要修改
+5. 根据需要的图片风格，选择对应的训练好的LoRA权重文件
